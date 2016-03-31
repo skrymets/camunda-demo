@@ -43,13 +43,13 @@ public class HelloWorldService implements JavaDelegate {
     }
 
     public void prepareData(String processInstanceId) throws Exception {
-        DataRequestMessage message = new DataRequestMessage().setProcessInstanceId(processInstanceId);
+        DataRequestMessage message = new DataRequestMessage().setInstanceId(processInstanceId);
         jmsTemplate.send(JMS_QUEUE_CAMUNDA_DEMO, MessageBuilder.withPayload(message).build());
     }
 
-    @JmsListener(destination = JMS_QUEUE_CAMUNDA_DEMO)
+    @JmsListener(destination = JMS_QUEUE_CAMUNDA_DEMO, containerFactory = "myJmsContainerFactory")
     public void readDataResponse(DataRequestMessage message) throws Exception {
-        LOG.info("A message received for process {}", message.getProcessInstanceId());
+        LOG.info("A message received for process {}", message.getInstanceId());
     }
 
     @PostConstruct

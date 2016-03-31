@@ -9,17 +9,28 @@ public class DataRequestMessage implements Serializable {
 
     private static final long serialVersionUID = -3821300948973997838L;
 
-    private String processInstanceId;
+    private String instanceId;
+
+    private String data;
 
     public DataRequestMessage() {
     }
 
-    public String getProcessInstanceId() {
-        return processInstanceId;
+    public String getInstanceId() {
+        return instanceId;
     }
 
-    public DataRequestMessage setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
+    public DataRequestMessage setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+        return this;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public DataRequestMessage setData(String data) {
+        this.data = data;
         return this;
     }
 
