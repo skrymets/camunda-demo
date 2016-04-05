@@ -34,11 +34,11 @@
       <bpmn:incoming>SequenceFlow_0bj17z7</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0j4igdx</bpmn:outgoing>
     </bpmn:subProcess>
-    <bpmn:receiveTask id="ReceiveTask_0q5p3wl" name="Read a message from  queue-2" messageRef="continueExecutionByEvent">
+    <bpmn:receiveTask id="ReceiveTask_0q5p3wl" name="Read a message from  queue-2" camunda:asyncBefore="true" messageRef="continueExecutionByEvent">
       <bpmn:incoming>SequenceFlow_1ydaprm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1j7q609</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:receiveTask id="ReceiveTask_1oq9omz" name="Wait for a REST call" messageRef="continueExecutionByRest">
+    <bpmn:receiveTask id="ReceiveTask_1oq9omz" name="Wait for a REST call" camunda:asyncBefore="true" messageRef="continueExecutionByRest">
       <bpmn:incoming>SequenceFlow_1odt6pf</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0824syd</bpmn:outgoing>
     </bpmn:receiveTask>

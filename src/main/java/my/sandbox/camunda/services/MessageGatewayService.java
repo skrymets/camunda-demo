@@ -23,6 +23,9 @@ public class MessageGatewayService {
     protected RuntimeService bpmService;
 
     @Autowired
+    protected LogDelegate logDelegate;
+
+    @Autowired
     protected JmsMessagingTemplate jmsTemplate;
 
     @JmsListener(destination = "demo-queue-1", containerFactory = "myJmsContainerFactory")
@@ -30,7 +33,7 @@ public class MessageGatewayService {
         LOG.info("Read from \"demo-queue-1\" {}", "", message.getInstanceId());
 
         Thread.sleep(2000);
-        
+
         bpmService
                 .createMessageCorrelation("continueExecutionByEventMessage")
                 .processInstanceId(message.getInstanceId())
@@ -49,6 +52,12 @@ public class MessageGatewayService {
     }
 
     public Object sendMessage(String queueName, String messageData, DelegateExecution execution) {
+
+        try {
+            logDelegate.execute(execution);
+        } catch (Exception e) {
+            LOG.error(e.getLocalizedMessage());
+        }
 
         LOG.info("Sending \"{}\" to \"{}\" from \"[{}]:{}\"", messageData, queueName,
                 execution.getActivityInstanceId(),
