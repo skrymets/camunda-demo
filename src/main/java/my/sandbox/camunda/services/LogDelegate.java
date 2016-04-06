@@ -1,5 +1,6 @@
 package my.sandbox.camunda.services;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.slf4j.Logger;
@@ -17,16 +18,15 @@ public class LogDelegate implements JavaDelegate {
     public void log(String message) throws Exception {
         LOG.info(message);
     }
-    
+
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        LOG.info(
-                "Step: \"{}\"\n"
-                + "Process: {} / {} / {}",
-                execution.getCurrentActivityName(),
-                execution.getProcessDefinitionId(),
+        LOG.info("[{} | {}] ({}) {}",
                 execution.getProcessInstanceId(),
-                execution.getProcessBusinessKey()
+                execution.getProcessDefinitionId(),
+                // firstNonNull(execution.getCurrentActivityId(), "-"),
+                firstNonNull(execution.getActivityInstanceId(), "-"),
+                execution.getCurrentActivityName()
         );
     }
 
