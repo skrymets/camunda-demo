@@ -28,7 +28,7 @@
       <bpmn:incoming>SequenceFlow_0j4igdx</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0j4igdx" sourceRef="CallActivity_0cmk5ye" targetRef="EndEvent_0o0bl02" />
-    <bpmn:sendTask id="SendTask_1axeo6e" name="Send  message to a queue-1" camunda:expression="${messageGatewayService.sendMessage(&#39;demo-queue-1&#39;, &#39;hello&#39;, execution)}" camunda:resultVariable="sendMessage">
+    <bpmn:sendTask id="SendTask_1axeo6e" name="Send  message to a queue-1" camunda:expression="${messageGatewayService.sendMessage(&#39;demo-queue-1&#39;, &#39;hello&#39;, execution)}" camunda:resultVariable="msgID">
       <bpmn:incoming>SequenceFlow_1a3d5uh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0qgiecm</bpmn:outgoing>
     </bpmn:sendTask>
@@ -46,7 +46,7 @@
       <bpmn:outgoing>SequenceFlow_0a292vl</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0qgiecm" sourceRef="SendTask_1axeo6e" targetRef="IntermediateCatchEvent_0kumx69" />
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0kumx69" name="Read a message from queue-2" camunda:asyncBefore="true" camunda:exclusive="false">
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0kumx69" name="Read a message from queue-2">
       <bpmn:incoming>SequenceFlow_0qgiecm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1b6hm59</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="continueExecutionByEvent" />
