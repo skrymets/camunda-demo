@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author dtv
  */
-@Configuration
+//@Configuration
 public class DataSourceConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DataSourceConfiguration.class);
     
-    @Bean(name="camundaBpmDataSource")
+    //@Bean(name="camundaBpmDataSource")
     DataSource customBpmDataSource() {
         LOG.debug("Creating a custom DataSource for Camunda Engine");
         return DataSourceBuilder.create()
