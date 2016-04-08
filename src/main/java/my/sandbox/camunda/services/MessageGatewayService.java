@@ -1,13 +1,12 @@
 package my.sandbox.camunda.services;
 
-import com.google.common.collect.Maps;
-import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import javax.transaction.Transactional;
 import my.sandbox.camunda.jms.DataRequestMessage;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.runtime.EventSubscription;
-import org.camunda.bpm.engine.runtime.Execution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
  * @author dtv
  */
 @Service("messageGatewayService")
+// @Transactional
 public class MessageGatewayService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageGatewayService.class);
@@ -55,13 +55,13 @@ public class MessageGatewayService {
         DataRequestMessage payload = message.getPayload();
 
         LOG.info("Read from \"demo-queue-2\". Process ID: {}", payload.getInstanceId());
-        
+
         bpmService
                 .createMessageCorrelation(MSG_CONTINUE_MAIN)
                 .processInstanceId(payload.getInstanceId())
                 .setVariable("businessUUID", UUID.randomUUID().toString())
                 .correlate();
-        
+
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //        Execution awaitingExecution = bpmService
 //                .createExecutionQuery()
@@ -85,6 +85,31 @@ public class MessageGatewayService {
     public void readQueue3(Message<DataRequestMessage> message) throws Exception {
         DataRequestMessage payload = message.getPayload();
         LOG.info("Read from \"demo-queue-3\". Process ID: {}", payload.getInstanceId());
+    }
+
+    protected static final String REST_EVENT_MSG = "continueExecutionByRestMessage";
+
+    public int processRestCall() {
+        List<EventSubscription> eventSubscriptions = bpmService
+                .createEventSubscriptionQuery()
+                .eventName(REST_EVENT_MSG)
+                .list();
+        
+        if (eventSubscriptions.isEmpty()) {
+            LOG.info("There are no subscriptions for \"{}\"", REST_EVENT_MSG);
+            return 0;
+        }
+
+        eventSubscriptions.stream().forEach((subscription) -> {
+            bpmService.messageEventReceived(REST_EVENT_MSG, subscription.getExecutionId());
+            LOG.info("Notify {}@{} with {}",
+                    subscription.getActivityId(),
+                    subscription.getProcessInstanceId(),
+                    REST_EVENT_MSG
+            );
+        });
+        
+        return eventSubscriptions.size();
     }
 
     /**
