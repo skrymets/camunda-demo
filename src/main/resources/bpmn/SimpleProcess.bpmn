@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="SimpleProcess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1gx1ymv">
+      <bpmn:outgoing>SequenceFlow_0b1vp4a</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_1mvuzh8" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0b1vp4a" sourceRef="StartEvent_1gx1ymv" targetRef="ServiceTask_1y08s2p" />
+    <bpmn:endEvent id="EndEvent_0nmo4op">
+      <bpmn:incoming>SequenceFlow_1kh6dlj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1kh6dlj" sourceRef="ServiceTask_1y08s2p" targetRef="EndEvent_0nmo4op" />
+    <bpmn:serviceTask id="ServiceTask_1y08s2p" name="Log simple text" camunda:expression="${logDelegate.log(startupValue)}">
+      <bpmn:incoming>SequenceFlow_0b1vp4a</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1kh6dlj</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmn:message id="Message_1mvuzh8" name="SimpleProcessMessage" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SimpleProcess">
+      <bpmndi:BPMNShape id="StartEvent_1gx1ymv_di" bpmnElement="StartEvent_1gx1ymv">
+        <dc:Bounds x="170" y="104" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="143" y="140" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0b1vp4a_di" bpmnElement="SequenceFlow_0b1vp4a">
+        <di:waypoint xsi:type="dc:Point" x="206" y="122" />
+        <di:waypoint xsi:type="dc:Point" x="259" y="122" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="187.5" y="112" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0nmo4op_di" bpmnElement="EndEvent_0nmo4op">
+        <dc:Bounds x="412" y="104" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="385" y="140" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1kh6dlj_di" bpmnElement="SequenceFlow_1kh6dlj">
+        <di:waypoint xsi:type="dc:Point" x="359" y="122" />
+        <di:waypoint xsi:type="dc:Point" x="412" y="122" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="340.5" y="112" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1y08s2p_di" bpmnElement="ServiceTask_1y08s2p">
+        <dc:Bounds x="259" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

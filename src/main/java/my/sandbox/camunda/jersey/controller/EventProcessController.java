@@ -1,8 +1,11 @@
 package my.sandbox.camunda.jersey.controller;
 
+import java.util.Collections;
+import static java.util.Collections.singletonMap;
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -48,13 +51,6 @@ public class EventProcessController {
         dataRepository.save(new BusinessData(data));
         return Response.ok(new StringValue(data)).build();
     }
-    
-    @GET
-    @Path("/hc")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String serviceHealthCheck() {
-        return "OK";
-    }
 
     @GET
     @Path("go/{process-id}")
@@ -71,15 +67,27 @@ public class EventProcessController {
         }
     }
 
+    protected static final String REST_EVENT_MSG = "continueExecutionByRestMessage";
+    
     @GET
-    @Path("/resume")
+    @Path("/resume/{msg}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response resume() {
-        int eventSubscriptions = messageGatewayService.processRestCall();
+    public Response resume(@PathParam("msg") @DefaultValue(REST_EVENT_MSG) String msg) {
+        int eventSubscriptions = messageGatewayService.processRestCall(msg);
         return Response
                 .status(Response.Status.OK)
                 .entity("Notified " + eventSubscriptions + " activities")
                 .build();
+    }
+    
+    
+    @GET
+    @Path("/mainProcess2/{msg}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response mainProcess2(@PathParam("msg") @DefaultValue(REST_EVENT_MSG) String msg) {
+        ProcessInstance processInstance = bpmService
+                .startProcessInstanceByMessage("SimpleProcessMessage", singletonMap("startupValue", msg));
+        return Response.ok().entity(processInstance.getProcessInstanceId()).build();
     }
 
 }
